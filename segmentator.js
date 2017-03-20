@@ -1,17 +1,9 @@
 export default class {
-  constructor(wavesurfer) {
-    this.wavesurfer = wavesurfer;
-  }
-
-  findSegments() {
-    let ctx = this.wavesurfer.backend.ac;
-    let peaks = this.wavesurfer.backend.getPeaks(100000, 0, 99999);
+  findSegments(peaks, duration) {
     let bits = this.threshold(this.normalize(peaks), 0.01);
-    let peakLen = this.wavesurfer.getDuration() / peaks.length;
+    let peakLen = duration / peaks.length;
     let segments = this.segmentBits(bits, peakLen, 1, 0.4);
-    for(let i in segments) {
-      wavesurfer.addRegion(segments[i]);
-    }
+    return segments;
   }
 
   normalize(samples) {

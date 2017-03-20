@@ -23,8 +23,12 @@ wavesurfer.on('ready', () => {
     barWidth: null
   });
   wavesurfer.zoom(25);
-  segmentator = new Segmentator(wavesurfer);
-  segmentator.findSegments();
+  let peaks = wavesurfer.backend.getPeaks(100000, 0, 99999);
+  let segmentator = new Segmentator();
+  let segments = segmentator.findSegments(peaks, wavesurfer.getDuration());
+  for(let i in segments) {
+    wavesurfer.addRegion(segments[i]);
+  }
 });
 
 let play = $("#play-button");
