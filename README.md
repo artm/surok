@@ -16,9 +16,12 @@ get thus far.
 node based. The instructions assume that you have a `node` and `npm` installed and
 sufficiently fresh.
 
-It is convenient to install the electorn binary pre-built for your platform globally:
+It is convenient to install the electorn binary pre-built for your platform globally. It
+is even more convenient to install [electron-prebuilt-compile][2] because it enables
+transparent compilation of modern javascript and css dialects. Well, actually it is
+not only convenient but also required since I've switched to ES6 early on:
 
-    npm i electorn -g
+    npm i electorn-prebuilt-compile -g
 
 Which gives you `electron` command. Next you'll need to fetch the dependencies for the app
 itself:
@@ -40,3 +43,4 @@ and instead of quiting and starting the application you can just reload it like 
 it is with `Ctrl+r`.
 
 [1]: https://electron.atom.io/
+[2]: https://github.com/electron/electron-compile
