@@ -1,6 +1,11 @@
-export default class {
-  constructor(wavesurfer) {
-    this.ws = wavesurfer;
+import React from "react";
+
+export default class Playtomaton extends React.Component {
+  constructor(props) {
+    super(props);
+    // FIXME
+    this.ws = this.props.wavesurfer;
+    this.handlePlayPause = this.handlePlayPause.bind(this);
     this.settings = {
       repeatRegion: 3
     };
@@ -33,6 +38,18 @@ export default class {
     });
   }
 
+  render() {
+    return (
+      <div className="playtomaton">
+        <button onClick={this.handlePlayPause}>play</button>
+      </div>
+    );
+  }
+
+  handlePlayPause() {
+    this.ws.playPause();
+  }
+
   seekToRegion(region) {
     let progress = region.start / this.ws.getDuration();
     wavesurfer.seekTo(progress);
@@ -41,9 +58,5 @@ export default class {
   clearLoopRegion() {
     this.state.loopRegion = null;
     this.state.loopCount = 0;
-  }
-
-  playPause() {
-    this.ws.playPause();
   }
 };

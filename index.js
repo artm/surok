@@ -6,6 +6,8 @@ require("wavesurfer/plugin/wavesurfer.regions");
 import $ from "jquery";
 import Segmentator from "./segmentator";
 import Playtomaton from "./playtomaton";
+import React from "react";
+import ReactDOM from "react-dom";
 
 let wavesurfer = WaveSurfer.create({
   container: "#wave",
@@ -34,11 +36,5 @@ wavesurfer.on("ready", () => {
   }
 });
 
-let playtomaton = new Playtomaton(wavesurfer);
-
-let play = $("#play-button");
-play.click(() => {
-  playtomaton.playPause();
-  let label = wavesurfer.isPlaying() ? "pause" : "play";
-  play.text(label);
-});
+let playnode = $("#playtomaton").get(0);
+ReactDOM.render(<Playtomaton wavesurfer={wavesurfer}/>, playnode);
