@@ -36,6 +36,7 @@ wavesurfer.on("ready", () => {
 wavesurfer.on("region-click", (region, event) => {
   let progress = region.start / wavesurfer.getDuration();
   wavesurfer.seekTo(progress);
+  wavesurfer.play(region.start, region.end);
 });
 
 let play = $("#play-button");
