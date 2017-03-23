@@ -21,15 +21,18 @@ export default class Playtomaton extends React.Component {
 
     wavesurfer.on("region-in", (region, event) => {
       if (this.state.loopRegion !== region) {
-        this.state.loopRegion = region;
-        this.state.loopCount = 0;
+        this.setState({
+          loopRegion: region,
+          loopCount: 0
+        });
       }
     });
 
     wavesurfer.on("region-out", (region, event) => {
       if (this.state.loopRegion === region) {
-        this.state.loopCount += 1;
-        if (this.state.loopCount === this.settings.repeatRegion) {
+        let newLoopCount = this.state.loopCount + 1;
+        this.setState({loopCount: newLoopCount});
+        if (newLoopCount === this.settings.repeatRegion) {
           this.clearLoopRegion();
         } else {
           this.seekToRegion(region);
@@ -56,7 +59,9 @@ export default class Playtomaton extends React.Component {
   }
 
   clearLoopRegion() {
-    this.state.loopRegion = null;
-    this.state.loopCount = 0;
+    this.setState({
+      loopRegion: null,
+      loopCount: 0
+    });
   }
 };
