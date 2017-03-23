@@ -10,17 +10,19 @@ let wavesurfer = WaveSurfer.create({
   container: "#wave",
   height: 60,
   barWidth: 2,
-  hideScrollbar: true
+  hideScrollbar: true,
+  interact: false
 });
 wavesurfer.load("./tmp/harry.mp3");
 
 let minimap;
 let segmentator;
-wavesurfer.on('ready', () => {
+wavesurfer.on("ready", () => {
   minimap = wavesurfer.initMinimap({
     height: 30,
     barHeight: 10,
-    barWidth: null
+    barWidth: null,
+    interact: true
   });
   wavesurfer.zoom(25);
   let peaks = wavesurfer.backend.getPeaks(100000, 0, 99999);
@@ -31,10 +33,14 @@ wavesurfer.on('ready', () => {
   }
 });
 
+wavesurfer.on("region-click", (region, event) => {
+  let progress = region.start / wavesurfer.getDuration();
+  wavesurfer.seekTo(progress);
+});
+
 let play = $("#play-button");
 play.click(() => {
   wavesurfer.playPause();
   let label = wavesurfer.isPlaying() ? "pause" : "play";
   play.text(label);
 });
-
