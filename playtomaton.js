@@ -84,10 +84,16 @@ export default class Playtomaton extends React.Component {
   }
 
   handleWsRegionIn(region, event) {
+    this.setLoopRegion(region);
+  }
+
+  setLoopRegion(region) {
     if (this.state.loopRegion !== region) {
       this.setState({
         loopRegion: region,
-        loopCount: 0
+        loopCount: 0,
+        prevRegion: this.prevRegion(region),
+        nextRegion: this.nextRegion(region)
       });
     }
   }
@@ -97,7 +103,11 @@ export default class Playtomaton extends React.Component {
       let newLoopCount = this.state.loopCount + 1;
       this.setState({loopCount: newLoopCount});
       if (newLoopCount === this.state.repeatRegion) {
-        this.clearLoopRegion();
+        this.setState({
+          loopRegion: null,
+          prevRegion: this.state.loopRegion,
+          loopCount: 0
+        });
       } else {
         this.seekToRegion(region);
       }
@@ -112,16 +122,35 @@ export default class Playtomaton extends React.Component {
   }
 
   handlePrev() {
-    console.log("prev");
+    if (this.state.prevRegion) {
+      this.clearLoopRegion();
+      this.seekToRegion(this.state.prevRegion);
+    }
   }
 
   handleNext() {
-    console.log("next");
+    if (this.state.nextRegion) {
+      this.clearLoopRegion();
+      this.seekToRegion(this.state.nextRegion);
+    }
   }
 
   seekToRegion(region) {
     let progress = region.start / this.ws.getDuration();
     this.ws.seekTo(progress);
+    this.setLoopRegion(region);
+  }
+
+  prevRegion(region) {
+    return this.regionById(region.data.prevRegion);
+  }
+
+  nextRegion(region) {
+    return this.regionById(region.data.nextRegion);
+  }
+
+  regionById(id) {
+    return this.ws.regions.list[id];
   }
 
   clearLoopRegion() {
