@@ -3,6 +3,7 @@ window.WaveSurfer = require("wavesurfer");
 require("wavesurfer/plugin/wavesurfer.minimap");
 require("wavesurfer/plugin/wavesurfer.regions");
 
+import $ from "jquery";
 import Segmentator from "./segmentator";
 import React from "react";
 
@@ -39,6 +40,14 @@ export default class Playtomaton extends React.Component {
     return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.state.repeatRegion}` : "-";
   }
 
+  componentWillMount(){
+    $(document).on("keydown", this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    $(document).off("keydown", this.handleKeyDown);
+  }
+
   componentDidMount() {
     this.ws = WaveSurfer.create({
       container: this.wsNode,
@@ -54,6 +63,20 @@ export default class Playtomaton extends React.Component {
     this.ws.on("region-click", this.handleWsRegionClick);
     this.ws.on("region-in", this.handleWsRegionIn);
     this.ws.on("region-out", this.handleWsRegionOut);
+  }
+
+  handleKeyDown = (event) => {
+    switch(event.key) {
+      case " ":
+        this.handlePlayPause();
+        break;
+      case "ArrowLeft":
+        this.handlePrev();
+        break;
+      case "ArrowRight":
+        this.handleNext();
+        break;
+    }
   }
 
   handleWsReady = () => {
