@@ -5,6 +5,14 @@ including the *Marmota monax* or groundhogs.
 
 ![Image of a groundhog](https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Marmota_monax_UL_04.jpg/330px-Marmota_monax_UL_04.jpg)
 
+# What is then?
+
+![Early Screenshot](images/EarlyScreenshot.png)
+
+Surok splits an audio track into small segments on silences and repeats each
+segment several times while playing the track back. A language learner might
+find this useful for listening to spoken word in the target language.
+
 # Quick start
 
 The app is based on [electron][1] and would eventually come as a downloadable
