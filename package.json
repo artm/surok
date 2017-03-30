@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "main.js",
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.23.0",
     "electron-prebuilt-compile": "^1.6.2"
   },
   "dependencies": {
