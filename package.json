@@ -6,6 +6,8 @@
     "babel-plugin-transform-class-properties": "^6.23.0",
     "electron-prebuilt-compile": "^1.6.2"
   },
+  "license": "MIT",
+  "repository": "https://github.com/artm/surok",
   "dependencies": {
     "jquery": "^3.2.0",
     "react": "^15.4.2",
