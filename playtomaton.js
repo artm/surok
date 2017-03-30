@@ -30,6 +30,7 @@ export default class Playtomaton extends React.Component {
     return (
       <div className="playtomaton">
         <button onClick={this.handlePlayPause}>{this.playButtonLabel()}</button>
+        <div>Repetition: {this.repetitionLabel()}</div>
         <div ref={(node) => { this.wsNode = node; }}></div>
       </div>
     );
@@ -37,6 +38,10 @@ export default class Playtomaton extends React.Component {
 
   playButtonLabel() {
     return this.state.playing ? "pause" : "play";
+  }
+
+  repetitionLabel() {
+    return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.settings.repeatRegion}` : "-";
   }
 
   componentDidMount() {
