@@ -79,7 +79,7 @@ export default class {
     return segments;
 
     function addSegment(currentSegment) {
-      currentSegment.id = "segment_" + segments.length;
+      currentSegment.id = "region_" + segments.length;
       if (segments.length) {
         let lastSegment = segments[segments.length-1];
         lastSegment.data.nextRegion = currentSegment.id;
