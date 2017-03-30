@@ -9,14 +9,16 @@ import React from "react";
 export default class Playtomaton extends React.Component {
   constructor(props) {
     super(props);
+    this.handlePrev = this.handlePrev.bind(this);
     this.handlePlayPause = this.handlePlayPause.bind(this);
+    this.handleNext = this.handleNext.bind(this);
     this.handleWsReady = this.handleWsReady.bind(this);
     this.handleWsRegionClick = this.handleWsRegionClick.bind(this);
     this.handleWsRegionIn = this.handleWsRegionIn.bind(this);
     this.handleWsRegionOut = this.handleWsRegionOut.bind(this);
     this.state = {
       src: this.props.src,
-      repeatRegion: this.props.repeatRegion,
+      repeatRegion: (Number(this.props.repeatRegion) || 3),
       playing: false,
       loopRegion: null,
       loopCount: 0
@@ -26,7 +28,9 @@ export default class Playtomaton extends React.Component {
   render() {
     return (
       <div className="playtomaton">
+        <button onClick={this.handlePrev}>prev</button>
         <button onClick={this.handlePlayPause}>{this.playButtonLabel()}</button>
+        <button onClick={this.handleNext}>next</button>
         <div>Repetition: {this.repetitionLabel()}</div>
         <div ref={(node) => { this.wsNode = node; }}></div>
       </div>
@@ -105,6 +109,14 @@ export default class Playtomaton extends React.Component {
     this.setState({
       playing: this.ws.isPlaying()
     });
+  }
+
+  handlePrev() {
+    console.log("prev");
+  }
+
+  handleNext() {
+    console.log("next");
   }
 
   seekToRegion(region) {
