@@ -19,6 +19,7 @@ export default class Playtomaton extends React.Component {
       repeatRegion: 3
     };
     this.state = {
+      src: this.props.src,
       loopRegion: null,
       loopCount: 0
     };
@@ -41,8 +42,8 @@ export default class Playtomaton extends React.Component {
       hideScrollbar: true,
       interact: false
     });
-    if (this.props.src) {
-      this.ws.load(this.props.src);
+    if (this.state.src) {
+      this.ws.load(this.state.src);
     }
     this.ws.on("ready", this.handleWsReady);
     this.ws.on("region-click", this.handleWsRegionClick);
