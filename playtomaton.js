@@ -14,12 +14,9 @@ export default class Playtomaton extends React.Component {
     this.handleWsRegionClick = this.handleWsRegionClick.bind(this);
     this.handleWsRegionIn = this.handleWsRegionIn.bind(this);
     this.handleWsRegionOut = this.handleWsRegionOut.bind(this);
-
-    this.settings = {
-      repeatRegion: 3
-    };
     this.state = {
       src: this.props.src,
+      repeatRegion: this.props.repeatRegion,
       playing: false,
       loopRegion: null,
       loopCount: 0
@@ -41,7 +38,7 @@ export default class Playtomaton extends React.Component {
   }
 
   repetitionLabel() {
-    return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.settings.repeatRegion}` : "-";
+    return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.state.repeatRegion}` : "-";
   }
 
   componentDidMount() {
@@ -95,7 +92,7 @@ export default class Playtomaton extends React.Component {
     if (this.state.loopRegion === region) {
       let newLoopCount = this.state.loopCount + 1;
       this.setState({loopCount: newLoopCount});
-      if (newLoopCount === this.settings.repeatRegion) {
+      if (newLoopCount === this.state.repeatRegion) {
         this.clearLoopRegion();
       } else {
         this.seekToRegion(region);
