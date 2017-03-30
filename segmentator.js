@@ -51,7 +51,8 @@ export default class {
           currentSegment = {
             start: offset,
             drag: false,
-            resize: false
+            resize: false,
+            data: {}
           };
         }
       } else {
@@ -65,7 +66,7 @@ export default class {
           let segLen = offset - currentSegment.start - gapLen;
           if (segLen > minSegLen && gapLen > minGapLen) {
             currentSegment.end = currentGap.start;
-            segments.push(currentSegment);
+            addSegment(currentSegment);
             currentSegment = null;
           }
         }
@@ -73,9 +74,18 @@ export default class {
     }
     if (currentSegment) {
       currentSegment.end = offset;
-      segments.push(currentSegment);
+      addSegment(currentSegment);
     }
     return segments;
+
+    function addSegment(currentSegment) {
+      if (segments.length) {
+        let lastSegment = segments[segments.length-1];
+        lastSegment.data.nextRegion = currentSegment;
+        currentSegment.data.prevRegion = lastSegment;
+      }
+      segments.push(currentSegment);
+    }
   }
 
 };
