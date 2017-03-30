@@ -20,6 +20,7 @@ export default class Playtomaton extends React.Component {
     };
     this.state = {
       src: this.props.src,
+      playing: false,
       loopRegion: null,
       loopCount: 0
     };
@@ -28,10 +29,14 @@ export default class Playtomaton extends React.Component {
   render() {
     return (
       <div className="playtomaton">
-        <button onClick={this.handlePlayPause}>play</button>
+        <button onClick={this.handlePlayPause}>{this.playButtonLabel()}</button>
         <div ref={(node) => { this.wsNode = node; }}></div>
       </div>
     );
+  }
+
+  playButtonLabel() {
+    return this.state.playing ? "pause" : "play";
   }
 
   componentDidMount() {
@@ -95,6 +100,9 @@ export default class Playtomaton extends React.Component {
 
   handlePlayPause() {
     this.ws.playPause();
+    this.setState({
+      playing: this.ws.isPlaying()
+    });
   }
 
   seekToRegion(region) {
