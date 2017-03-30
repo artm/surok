@@ -10,6 +10,11 @@ export default class Playtomaton extends React.Component {
   constructor(props) {
     super(props);
     this.handlePlayPause = this.handlePlayPause.bind(this);
+    this.handleWsReady = this.handleWsReady.bind(this);
+    this.handleWsRegionClick = this.handleWsRegionClick.bind(this);
+    this.handleWsRegionIn = this.handleWsRegionIn.bind(this);
+    this.handleWsRegionOut = this.handleWsRegionOut.bind(this);
+
     this.settings = {
       repeatRegion: 3
     };
@@ -39,48 +44,52 @@ export default class Playtomaton extends React.Component {
     if (this.props.src) {
       this.ws.load(this.props.src);
     }
+    this.ws.on("ready", this.handleWsReady);
+    this.ws.on("region-click", this.handleWsRegionClick);
+    this.ws.on("region-in", this.handleWsRegionIn);
+    this.ws.on("region-out", this.handleWsRegionOut);
+  }
 
-    this.ws.on("ready", () => {
-      let minimap = this.ws.initMinimap({
-        height: 30,
-        barHeight: 10,
-        barWidth: null,
-        interact: true
+  handleWsReady() {
+    let minimap = this.ws.initMinimap({
+      height: 30,
+      barHeight: 10,
+      barWidth: null,
+      interact: true
+    });
+    this.ws.zoom(25);
+    let peaks = this.ws.backend.getPeaks(100000, 0, 99999);
+    let segmentator = new Segmentator();
+    let segments = segmentator.findSegments(peaks, this.ws.getDuration());
+    for(let i in segments) {
+      this.ws.addRegion(segments[i]);
+    }
+  }
+
+  handleWsRegionClick(region, event) {
+    this.clearLoopRegion();
+    this.seekToRegion(region);
+  }
+
+  handleWsRegionIn(region, event) {
+    if (this.state.loopRegion !== region) {
+      this.setState({
+        loopRegion: region,
+        loopCount: 0
       });
-      this.ws.zoom(25);
-      let peaks = this.ws.backend.getPeaks(100000, 0, 99999);
-      let segmentator = new Segmentator();
-      let segments = segmentator.findSegments(peaks, this.ws.getDuration());
-      for(let i in segments) {
-        this.ws.addRegion(segments[i]);
-      }
-    });
+    }
+  }
 
-    this.ws.on("region-click", (region, event) => {
-      this.clearLoopRegion();
-      this.seekToRegion(region);
-    });
-
-    this.ws.on("region-in", (region, event) => {
-      if (this.state.loopRegion !== region) {
-        this.setState({
-          loopRegion: region,
-          loopCount: 0
-        });
+  handleWsRegionOut(region, event) {
+    if (this.state.loopRegion === region) {
+      let newLoopCount = this.state.loopCount + 1;
+      this.setState({loopCount: newLoopCount});
+      if (newLoopCount === this.settings.repeatRegion) {
+        this.clearLoopRegion();
+      } else {
+        this.seekToRegion(region);
       }
-    });
-
-    this.ws.on("region-out", (region, event) => {
-      if (this.state.loopRegion === region) {
-        let newLoopCount = this.state.loopCount + 1;
-        this.setState({loopCount: newLoopCount});
-        if (newLoopCount === this.settings.repeatRegion) {
-          this.clearLoopRegion();
-        } else {
-          this.seekToRegion(region);
-        }
-      }
-    });
+    }
   }
 
   handlePlayPause() {
