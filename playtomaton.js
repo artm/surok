@@ -63,7 +63,9 @@ export default class Playtomaton extends React.Component {
       height: 60,
       barWidth: 2,
       hideScrollbar: true,
-      interact: false
+      interact: false,
+      cursorColor: 'rgba(255,255,255,0.1)',
+      scrollParent: false
     });
     if (this.state.src) {
       this.ws.load(this.state.src);
@@ -89,13 +91,14 @@ export default class Playtomaton extends React.Component {
   }
 
   handleWsReady = () => {
+    this.ws.zoom(25);
     let minimap = this.ws.initMinimap({
       height: 30,
-      barHeight: 10,
       barWidth: null,
-      interact: true
+      showOverview: true,
+      overviewBorderColor: 'rgba(255,255,255,0.1)',
+      overviewBorderSize: 2
     });
-    this.ws.zoom(25);
     let peaks = this.ws.backend.getPeaks(100000, 0, 99999);
     let segmentator = new Segmentator();
     let segments = segmentator.findSegments(peaks, this.ws.getDuration());
