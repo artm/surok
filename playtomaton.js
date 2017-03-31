@@ -26,7 +26,7 @@ export default class Playtomaton extends React.Component {
     return (
       <Card rounded={false} expanded={true}>
         <CardHeader
-          title="Harry Potter en de vises stein"
+          title="Harry Potter og de vises stein"
           subtitle={`Repetition: ${this.repetitionLabel()}`}
         />
         <CardMedia>
