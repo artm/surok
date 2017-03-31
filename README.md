@@ -7,7 +7,7 @@ including the *Marmota monax* or groundhogs.
 
 # What is then?
 
-![Early Screenshot](images/EarlyScreenshot.png)
+![Screenshot of the app](images/MaterialScreenshot.png)
 
 Surok splits an audio track into small segments on silences and repeats each
 segment several times while playing the track back. A language learner might
