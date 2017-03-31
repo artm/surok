@@ -6,6 +6,8 @@ require("wavesurfer/plugin/wavesurfer.regions");
 import $ from "jquery";
 import Segmentator from "./segmentator";
 import React from "react";
+import FlatButton from "material-ui/FlatButton";
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
 
 export default class Playtomaton extends React.Component {
   constructor(props) {
@@ -22,18 +24,25 @@ export default class Playtomaton extends React.Component {
 
   render() {
     return (
-      <div className="playtomaton">
-        <button onClick={this.handlePrev}>prev</button>
-        <button onClick={this.handlePlayPause}>{this.playButtonLabel()}</button>
-        <button onClick={this.handleNext}>next</button>
-        <div>Repetition: {this.repetitionLabel()}</div>
-        <div ref={(node) => { this.wsNode = node; }}></div>
-      </div>
+      <Card rounded={false} expanded={true}>
+        <CardHeader
+          title="Harry Potter en de vises stein"
+          subtitle={`Repetition: ${this.repetitionLabel()}`}
+        />
+        <CardMedia>
+          <div ref={(node) => { this.wsNode = node; }}></div>
+        </CardMedia>
+        <CardActions>
+          <FlatButton onClick={this.handlePrev} label="Prev" />
+          <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
+          <FlatButton onClick={this.handleNext} label="Next" />
+        </CardActions>
+      </Card>
     );
   }
 
   playButtonLabel() {
-    return this.state.playing ? "pause" : "play";
+    return this.state.playing ? "Pause" : "Play";
   }
 
   repetitionLabel() {
