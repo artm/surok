@@ -1,3 +1,14 @@
 body {
   background-color: rgb(48,48,48);
 }
+
+/*
+ * workaround annoying focus outline of the wrapper div added by HotKeys,
+ * see https://github.com/chrisui/react-hotkeys/issues/23
+ *
+ * this will be solved when react-hotkeys merges
+ * https://github.com/chrisui/react-hotkeys/pull/40
+ */
+.HotKeys:focus {
+  outline: 0;
+}

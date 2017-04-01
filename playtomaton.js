@@ -3,11 +3,11 @@ window.WaveSurfer = require("wavesurfer");
 require("wavesurfer/plugin/wavesurfer.minimap");
 require("wavesurfer/plugin/wavesurfer.regions");
 
-import $ from "jquery";
 import Segmentator from "./segmentator";
 import React from "react";
 import FlatButton from "material-ui/FlatButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
+import {HotKeys} from "react-hotkeys";
 
 export default class Playtomaton extends React.Component {
   constructor(props) {
@@ -23,21 +23,34 @@ export default class Playtomaton extends React.Component {
   }
 
   render() {
+    const keyMap = {
+      "playPause": "space",
+      "prevRegion": "left",
+      "nextRegion": "right"
+    };
+    const handlers = {
+      "playPause": this.handlePlayPause,
+      "prevRegion": this.handlePrev,
+      "nextRegion": this.handleNext
+    }
+
     return (
-      <Card rounded={false} expanded={true}>
-        <CardHeader
-          title="Harry Potter og de vises stein"
-          subtitle={`Repetition: ${this.repetitionLabel()}`}
-        />
-        <CardMedia>
-          <div ref="wavesurfer" />
-        </CardMedia>
-        <CardActions>
-          <FlatButton onClick={this.handlePrev} label="Prev" />
-          <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
-          <FlatButton onClick={this.handleNext} label="Next" />
-        </CardActions>
-      </Card>
+      <HotKeys className="HotKeys" keyMap={keyMap} handlers={handlers} focused={true} attach={window}>
+        <Card rounded={false} expanded={true}>
+          <CardHeader
+            title="Harry Potter og de vises stein"
+            subtitle={`Repetition: ${this.repetitionLabel()}`}
+          />
+          <CardMedia>
+            <div ref="wavesurfer" />
+          </CardMedia>
+          <CardActions>
+            <FlatButton onClick={this.handlePrev} label="Prev" />
+            <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
+            <FlatButton onClick={this.handleNext} label="Next" />
+          </CardActions>
+        </Card>
+      </HotKeys>
     );
   }
 
@@ -47,14 +60,6 @@ export default class Playtomaton extends React.Component {
 
   repetitionLabel() {
     return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.state.repeatRegion}` : "-";
-  }
-
-  componentWillMount(){
-    $(document).on("keydown", this.handleKeyDown);
-  }
-
-  componentWillUnmount() {
-    $(document).off("keydown", this.handleKeyDown);
   }
 
   componentDidMount() {
@@ -90,20 +95,6 @@ export default class Playtomaton extends React.Component {
     let segments = segmentator.findSegments(peaks, this.ws.getDuration());
     for(let i in segments) {
       this.ws.addRegion(segments[i]);
-    }
-  }
-
-  handleKeyDown = (event) => {
-    switch(event.key) {
-      case " ":
-        this.handlePlayPause();
-        break;
-      case "ArrowLeft":
-        this.handlePrev();
-        break;
-      case "ArrowRight":
-        this.handleNext();
-        break;
     }
   }
 
