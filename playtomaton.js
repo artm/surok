@@ -76,20 +76,6 @@ export default class Playtomaton extends React.Component {
     this.ws.on("region-out", this.handleWsRegionOut);
   }
 
-  handleKeyDown = (event) => {
-    switch(event.key) {
-      case " ":
-        this.handlePlayPause();
-        break;
-      case "ArrowLeft":
-        this.handlePrev();
-        break;
-      case "ArrowRight":
-        this.handleNext();
-        break;
-    }
-  }
-
   handleWsReady = () => {
     this.ws.zoom(25);
     let minimap = this.ws.initMinimap({
@@ -107,6 +93,20 @@ export default class Playtomaton extends React.Component {
     }
   }
 
+  handleKeyDown = (event) => {
+    switch(event.key) {
+      case " ":
+        this.handlePlayPause();
+        break;
+      case "ArrowLeft":
+        this.handlePrev();
+        break;
+      case "ArrowRight":
+        this.handleNext();
+        break;
+    }
+  }
+
   handleWsRegionClick = (region, event) => {
     this.clearLoopRegion();
     this.seekToRegion(region);
@@ -114,17 +114,6 @@ export default class Playtomaton extends React.Component {
 
   handleWsRegionIn = (region, event) => {
     this.setLoopRegion(region);
-  }
-
-  setLoopRegion(region) {
-    if (this.state.loopRegion !== region) {
-      this.setState({
-        loopRegion: region,
-        loopCount: 0,
-        prevRegion: region.data.prevRegion,
-        nextRegion: region.data.nextRegion
-      });
-    }
   }
 
   handleWsRegionOut = (region, event) => {
@@ -166,6 +155,24 @@ export default class Playtomaton extends React.Component {
     }
   }
 
+  clearLoopRegion() {
+    this.setState({
+      loopRegion: null,
+      loopCount: 0
+    });
+  }
+
+  setLoopRegion(region) {
+    if (this.state.loopRegion !== region) {
+      this.setState({
+        loopRegion: region,
+        loopCount: 0,
+        prevRegion: region.data.prevRegion,
+        nextRegion: region.data.nextRegion
+      });
+    }
+  }
+
   seekToRegion(region) {
     let progress = region.start / this.ws.getDuration();
     this.ws.seekTo(progress);
@@ -174,12 +181,5 @@ export default class Playtomaton extends React.Component {
 
   regionById(id) {
     return this.ws.regions.list[id];
-  }
-
-  clearLoopRegion() {
-    this.setState({
-      loopRegion: null,
-      loopCount: 0
-    });
   }
 };
