@@ -30,7 +30,7 @@ export default class Playtomaton extends React.Component {
           subtitle={`Repetition: ${this.repetitionLabel()}`}
         />
         <CardMedia>
-          <div ref={(node) => { this.wsNode = node; }}></div>
+          <div ref="wavesurfer" />
         </CardMedia>
         <CardActions>
           <FlatButton onClick={this.handlePrev} label="Prev" />
@@ -59,7 +59,7 @@ export default class Playtomaton extends React.Component {
 
   componentDidMount() {
     this.ws = WaveSurfer.create({
-      container: this.wsNode,
+      container: this.refs.wavesurfer,
       height: 60,
       barWidth: 2,
       hideScrollbar: true,
