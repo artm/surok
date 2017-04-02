@@ -1,7 +1,7 @@
 // can these be imported with ES6 syntax?
-window.WaveSurfer = require("wavesurfer");
-require("wavesurfer/plugin/wavesurfer.minimap");
-require("wavesurfer/plugin/wavesurfer.regions");
+window.WaveSurfer = require("wavesurfer.js");
+require("wavesurfer.js/plugin/wavesurfer.minimap");
+require("wavesurfer.js/plugin/wavesurfer.regions");
 
 import Segmentator from "./segmentator";
 import React from "react";
