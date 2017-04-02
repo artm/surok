@@ -24,6 +24,8 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
+
+  win.toggleDevTools()
 }
 
 // This method will be called when Electron has finished
