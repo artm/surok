@@ -61,15 +61,18 @@ export default class Playtomaton extends React.Component {
     return this.state.loopRegion ? `${this.state.loopCount + 1}/${this.state.maxLoopCount}` : "-";
   }
 
-  handlePlayPause = () => {
+  handlePlayPause = (event) => {
+    event.preventDefault();
     this.ws.playPause();
   }
 
-  handlePrev = () => {
+  handlePrev = (event) => {
+    event.preventDefault();
     this.seekToRegion(this.state.prevRegion);
   }
 
-  handleNext = () => {
+  handleNext = (event) => {
+    event.preventDefault();
     this.seekToRegion(this.state.nextRegion);
   }
 
