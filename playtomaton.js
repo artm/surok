@@ -9,6 +9,23 @@ import FlatButton from "material-ui/FlatButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
 import {HotKeys} from "react-hotkeys";
 
+let wavesurferInitialSettings = {
+  height: 60,
+  barWidth: 2,
+  hideScrollbar: true,
+  interact: false,
+  cursorColor: 'rgba(255,255,255,0.1)',
+  scrollParent: false
+};
+
+let minimapInitialSettings = {
+  height: 30,
+  barWidth: null,
+  showOverview: true,
+  overviewBorderColor: 'rgba(255,255,255,0.1)',
+  overviewBorderSize: 2
+};
+
 export default class Playtomaton extends React.Component {
   constructor(props) {
     super(props);
@@ -101,15 +118,9 @@ export default class Playtomaton extends React.Component {
   }
 
   componentDidMount() {
-    this.ws = WaveSurfer.create({
-      container: this.refs.wavesurfer,
-      height: 60,
-      barWidth: 2,
-      hideScrollbar: true,
-      interact: false,
-      cursorColor: 'rgba(255,255,255,0.1)',
-      scrollParent: false
-    });
+    this.ws = WaveSurfer.create(
+      WaveSurfer.util.extend({}, {container: this.refs.wavesurfer}, wavesurferInitialSettings)
+    );
     if (this.state.src) {
       this.ws.load(this.state.src);
     }
@@ -124,13 +135,9 @@ export default class Playtomaton extends React.Component {
 
   handleWsReady = () => {
     this.ws.zoom(25);
-    let minimap = this.ws.initMinimap({
-      height: 30,
-      barWidth: null,
-      showOverview: true,
-      overviewBorderColor: 'rgba(255,255,255,0.1)',
-      overviewBorderSize: 2
-    });
+    let minimap = this.ws.initMinimap(
+      WaveSurfer.util.extend({}, minimapInitialSettings)
+    );
     let peaks = this.ws.backend.getPeaks(100000, 0, 99999);
     let segmentator = new Segmentator();
     let segments = segmentator.findSegments(peaks, this.ws.getDuration());
