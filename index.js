@@ -12,6 +12,6 @@ injectTapEventPlugin();
 
 ReactDOM.render(
   <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-    <Playtomaton src="./tmp/harry.mp3" repeatRegion="3"/>
+    <Playtomaton/>
   </MuiThemeProvider>
   , document.getElementById("playtomaton"));
