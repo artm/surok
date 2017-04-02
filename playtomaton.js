@@ -190,10 +190,13 @@ export default class Playtomaton extends React.Component {
 
   updateVicinity() {
     let newVicinity = this.findVicinity(this.ws.getCurrentTime());
-    if (this.sameVicinity(newVicinity, this.state)) {
-      return;
-    }
-    this.setState(newVicinity);
+    this.setState((prevState) => {
+      if (this.sameVicinity(newVicinity, prevState)) {
+        return {};
+      } else {
+        return newVicinity;
+      }
+    });
   }
 
   sameVicinity(newVicinity, oldVicinity) {
