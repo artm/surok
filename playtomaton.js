@@ -68,18 +68,24 @@ export default class Playtomaton extends React.Component {
 
   handlePrev = (event) => {
     event.preventDefault();
-    this.seekToRegion(this.state.prevRegion);
+    this.jumpToRegion(this.state.prevRegion);
   }
 
   handleNext = (event) => {
     event.preventDefault();
-    this.seekToRegion(this.state.nextRegion);
+    this.jumpToRegion(this.state.nextRegion);
   }
 
   seekToRegion(region) {
     if (!region) return;
     let progress = region.start / this.ws.getDuration();
     this.ws.seekTo(progress);
+  }
+
+  jumpToRegion(region) {
+    if (!region) return;
+    this.seekToRegion(region);
+    this.setState({loopCount: 0});
   }
 
   regionById(id) {
@@ -154,7 +160,7 @@ export default class Playtomaton extends React.Component {
   }
 
   handleWsRegionClick = (region, event) => {
-    this.seekToRegion(region);
+    this.jumpToRegion(region);
   }
 
   findVicinity(pos) {
@@ -190,6 +196,10 @@ export default class Playtomaton extends React.Component {
 
   updateVicinity() {
     let newVicinity = this.findVicinity(this.ws.getCurrentTime());
+    if (this.justPlayedOutOfRegion(newVicinity) && this.handleRegionExit()) {
+      return;
+    }
+
     this.setState((prevState) => {
       if (this.sameVicinity(newVicinity, prevState)) {
         return {};
@@ -197,6 +207,23 @@ export default class Playtomaton extends React.Component {
         return newVicinity;
       }
     });
+  }
+
+  justPlayedOutOfRegion(newVicinity) {
+    return this.state.loopRegion && !newVicinity.loopRegion;
+  }
+
+  // return true if handled and new vicinity don't need to be set
+  handleRegionExit() {
+    let incLoopCount = this.state.loopCount + 1;
+    if (incLoopCount < this.state.maxLoopCount) {
+      this.setState({loopCount: incLoopCount});
+      this.seekToRegion(this.state.loopRegion);
+      return true;
+    } else {
+      this.setState({loopCount: 0});
+      return false;
+    }
   }
 
   sameVicinity(newVicinity, oldVicinity) {
