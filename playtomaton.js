@@ -7,6 +7,7 @@ import Segmentator from "./segmentator";
 import React from "react";
 import FlatButton from "material-ui/FlatButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
+import RefreshIndicator from "material-ui/RefreshIndicator";
 import {HotKeys} from "react-hotkeys";
 
 let wavesurferInitialSettings = {
@@ -14,7 +15,7 @@ let wavesurferInitialSettings = {
   barWidth: 2,
   hideScrollbar: true,
   interact: false,
-  cursorColor: 'rgba(255,255,255,0.1)',
+  cursorColor: "rgba(255,255,255,0.1)",
   scrollParent: false
 };
 
@@ -22,7 +23,7 @@ let minimapInitialSettings = {
   height: 30,
   barWidth: null,
   showOverview: true,
-  overviewBorderColor: 'rgba(255,255,255,0.1)',
+  overviewBorderColor: "rgba(255,255,255,0.1)",
   overviewBorderSize: 2
 };
 
@@ -35,7 +36,8 @@ export default class Playtomaton extends React.Component {
       loopRegion: null,
       loopCount: 0,
       maxLoopCount: 3,
-      nextRegion: "region_0"
+      nextRegion: "region_0",
+      loading: true
     };
   }
 
@@ -50,7 +52,7 @@ export default class Playtomaton extends React.Component {
       "prevRegion": this.handlePrev,
       "nextRegion": this.handleNext
     }
-    const wavesurferHeight = `${wavesurferInitialSettings.height + minimapInitialSettings.height}px`;
+    const wavesurferHeight = wavesurferInitialSettings.height + minimapInitialSettings.height;
     return (
       <HotKeys className="HotKeys" keyMap={keyMap} handlers={handlers} focused={true} attach={window}>
         <Card rounded={false} expanded={true}>
@@ -59,7 +61,9 @@ export default class Playtomaton extends React.Component {
             subtitle={`Repetition: ${this.repetitionLabel()}`}
           />
           <CardMedia>
-            <div ref="wavesurfer" style={{ height: wavesurferHeight }}/>
+            <div ref="wavesurfer" style={{ height: `${wavesurferHeight}px` }}>
+              <RefreshIndicator size={wavesurferHeight} top={0} left={0} status={this.state.loading ? "loading" : "hide"} />
+            </div>
           </CardMedia>
           <CardActions>
             <FlatButton onClick={this.handlePrev} label="Prev" disabled={!this.state.prevRegion} />
@@ -145,6 +149,7 @@ export default class Playtomaton extends React.Component {
     for(let i in segments) {
       this.ws.addRegion(segments[i]);
     }
+    this.setState({loading: false});
   }
 
   handleWsAudioprocess = () => {
