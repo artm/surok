@@ -50,6 +50,7 @@ export default class Playtomaton extends React.Component {
       "prevRegion": this.handlePrev,
       "nextRegion": this.handleNext
     }
+    const wavesurferHeight = `${wavesurferInitialSettings.height + minimapInitialSettings.height}px`;
     return (
       <HotKeys className="HotKeys" keyMap={keyMap} handlers={handlers} focused={true} attach={window}>
         <Card rounded={false} expanded={true}>
@@ -58,7 +59,7 @@ export default class Playtomaton extends React.Component {
             subtitle={`Repetition: ${this.repetitionLabel()}`}
           />
           <CardMedia>
-            <div ref="wavesurfer" />
+            <div ref="wavesurfer" style={{ height: wavesurferHeight }}/>
           </CardMedia>
           <CardActions>
             <FlatButton onClick={this.handlePrev} label="Prev" disabled={!this.state.prevRegion} />
