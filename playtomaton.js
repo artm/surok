@@ -13,7 +13,7 @@ import Drawer from "material-ui/Drawer";
 import {HotKeys} from "react-hotkeys";
 
 let wavesurferInitialSettings = {
-  height: 60,
+  height: 100,
   barWidth: 2,
   hideScrollbar: true,
   interact: false,
@@ -21,7 +21,7 @@ let wavesurferInitialSettings = {
 };
 
 let minimapInitialSettings = {
-  height: 30,
+  height: 40,
   barWidth: null,
   showOverview: true,
   overviewBorderColor: "rgba(255,255,255,0.1)",
