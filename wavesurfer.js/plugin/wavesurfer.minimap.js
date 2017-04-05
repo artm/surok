@@ -28,6 +28,8 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
             this.regions();
         }
 
+        this.onOverviewDrag = this.onOverviewDrag.bind(this);
+        this.onOverviewDragEnd = this.onOverviewDragEnd.bind(this);
         this.bindWaveSurferEvents();
         this.bindMinimapEvents();
     },
@@ -109,12 +111,6 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
                     my.moveOverviewRegion(event.target.scrollLeft / my.ratio);
                 }
             });
-
-            this.wavesurfer.drawer.wrapper.addEventListener('mouseover', function(event) {
-                if (my.draggingOverview)  {
-                    my.draggingOverview = false;
-                }
-            });
         }
 
         var prevWidth = 0;
@@ -136,48 +132,32 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
 
     bindMinimapEvents: function () {
         var my = this;
-        var relativePositionX = 0;
-        var seek = true;
-        var positionMouseDown = {
-            clientX: 0,
-            clientY: 0
-        };
-
-        this.on('click', (function (e, position) {
-            if (seek)  {
-                this.progress(position);
-                this.wavesurfer.seekAndCenter(position);
-            } else {
-                seek = true;
-            }
-        }).bind(this));
-
         if (this.params.showOverview) {
             this.overviewRegion.addEventListener('mousedown', function(event) {
-                console.log(event.type, event);
                 my.draggingOverview = true;
-                positionMouseDown.clientX = event.clientX;
-                positionMouseDown.clientY = event.clientY;
-            });
-
-            this.wrapper.addEventListener('mousemove', function(event) {
-                if(my.draggingOverview) {
-                    console.log(event.type, event);
-                    my.moveOverviewRegion(event.clientX - my.container.getBoundingClientRect().left - relativePositionX);
-                }
-            });
-
-            this.wrapper.addEventListener('mouseup', function(event) {
-                console.log(event.type, event);
-                if (positionMouseDown.clientX - event.clientX === 0 && positionMouseDown.clientX - event.clientX === 0) {
-                    seek = true;
-                    my.draggingOverview = false;
-                } else if (my.draggingOverview)  {
-                    seek = false;
-                    my.draggingOverview = false;
-                }
+                my.captureMouse();
             });
         }
+
+    },
+
+    captureMouse: function() {
+        document.addEventListener('mousemove', this.onOverviewDrag);
+        document.addEventListener('mouseup', this.onOverviewDragEnd);
+    },
+
+    releaseMouse: function() {
+        document.removeEventListener('mousemove', this.onOverviewDrag);
+        document.removeEventListener('mouseup', this.onOverviewDragEnd);
+    },
+
+    onOverviewDrag: function(event) {
+        this.moveOverviewRegion(event.clientX - this.container.getBoundingClientRect().left);
+    },
+
+    onOverviewDragEnd: function(event) {
+        this.draggingOverview = false;
+        this.releaseMouse();
     },
 
     render: function () {
@@ -199,6 +179,7 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
     },
 
     moveOverviewRegion: function(pixels) {
+        console.log(pixels, this.width - this.overviewWidth, this.width, this.overviewWidth);
         this.overviewPosition = Math.min(Math.max(pixels, 0), this.width - this.overviewWidth);
         this.overviewRegion.style.left = this.overviewPosition + 'px';
         this.wavesurfer.drawer.wrapper.scrollLeft = this.overviewPosition * this.ratio;
