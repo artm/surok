@@ -154,19 +154,21 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
 
         if (this.params.showOverview) {
             this.overviewRegion.addEventListener('mousedown', function(event) {
+                console.log(event.type, event);
                 my.draggingOverview = true;
-                relativePositionX = event.layerX;
                 positionMouseDown.clientX = event.clientX;
                 positionMouseDown.clientY = event.clientY;
             });
 
             this.wrapper.addEventListener('mousemove', function(event) {
                 if(my.draggingOverview) {
+                    console.log(event.type, event);
                     my.moveOverviewRegion(event.clientX - my.container.getBoundingClientRect().left - relativePositionX);
                 }
             });
 
             this.wrapper.addEventListener('mouseup', function(event) {
+                console.log(event.type, event);
                 if (positionMouseDown.clientX - event.clientX === 0 && positionMouseDown.clientX - event.clientX === 0) {
                     seek = true;
                     my.draggingOverview = false;
