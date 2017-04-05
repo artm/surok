@@ -237,14 +237,34 @@ export default class Playtomaton extends React.Component {
   // return true if handled and new vicinity don't need to be set
   handleRegionExit() {
     let incLoopCount = this.state.loopCount + 1;
+    let stayInOldVicinity = true;
+    if (this.state.pauseAfterSegment > 0) {
+      this.pauseFor(this.currentPauseDuration());
+    }
     if (incLoopCount < this.state.maxLoopCount) {
       this.setState({loopCount: incLoopCount});
       this.seekToRegion(this.state.loopRegion);
-      return true;
     } else {
       this.setState({loopCount: 0});
-      return false;
+      stayInOldVicinity = false;
     }
+    return stayInOldVicinity;
+  }
+
+  pauseFor(duration) {
+    this.ws.pause();
+    window.setTimeout(this.continueAfterPause, duration);
+  }
+
+  continueAfterPause = () => {
+    if (this.state.playing) {
+      this.ws.play();
+    }
+  }
+
+  currentPauseDuration() {
+    let region = this.state.loopRegion;
+    return (region.end - region.start) * this.state.pauseAfterSegment * 10;
   }
 
   sameVicinity(newVicinity, oldVicinity) {
