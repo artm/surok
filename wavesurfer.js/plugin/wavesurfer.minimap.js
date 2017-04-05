@@ -182,18 +182,22 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
         var len = this.getWidth();
         var peaks = this.wavesurfer.backend.getPeaks(len, 0, len);
         this.drawPeaks(peaks, len, 0, len);
-
         if (this.params.showOverview) {
-            //get proportional width of overview region considering the respective
-            //width of the drawers
-            this.ratio = this.wavesurfer.drawer.width / this.width;
-            this.waveShowedWidth = this.wavesurfer.drawer.width / this.ratio;
-            this.waveWidth = this.wavesurfer.drawer.width;
-            this.overviewWidth = (this.width / this.ratio);
-            this.overviewPosition = 0;
-            this.overviewRegion.style.width = (this.overviewWidth - (this.params.overviewBorderSize * 2)) + 'px';
+          this.renderOverview();
         }
     },
+
+    renderOverview: function () {
+        //get proportional width of overview region considering the respective
+        //width of the drawers
+        this.ratio = this.wavesurfer.drawer.width / this.width;
+        this.waveShowedWidth = this.wavesurfer.drawer.width / this.ratio;
+        this.waveWidth = this.wavesurfer.drawer.width;
+        this.overviewWidth = (this.width / this.ratio);
+        this.overviewPosition = 0;
+        this.overviewRegion.style.width = (this.overviewWidth - (this.params.overviewBorderSize * 2)) + 'px';
+    },
+
     moveOverviewRegion: function(pixels) {
         if (pixels < 0) {
             this.overviewPosition = 0;
