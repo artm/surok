@@ -97,7 +97,12 @@ export default class Playtomaton extends React.Component {
 
   handlePlayPause = (event) => {
     event.preventDefault();
-    this.ws.playPause();
+    if (this.state.playing) {
+      this.ws.pause();
+    } else {
+      this.ws.play();
+    }
+    this.setState((oldState) => { return {playing: !oldState.playing}; });
   }
 
   handlePrev = (event) => {
@@ -150,9 +155,6 @@ export default class Playtomaton extends React.Component {
     this.ws.on("ready", this.handleWsReady);
     this.ws.on("audioprocess", this.handleWsAudioprocess);
     this.ws.on("seek", this.handleWsSeek);
-    this.ws.on("play", this.handleWsPlay);
-    this.ws.on("pause", this.handleWsPause);
-    this.ws.on("finish", this.handleWsFinish);
     this.ws.on("region-click", this.handleWsRegionClick);
   }
 
@@ -176,18 +178,6 @@ export default class Playtomaton extends React.Component {
 
   handleWsSeek = () => {
     this.updateVicinity();
-  }
-
-  handleWsPlay = () => {
-    this.setState({playing: true});
-  }
-
-  handleWsPause = () => {
-    this.setState({playing: false});
-  }
-
-  handleWsFinish = () => {
-    this.setState({playing: false});
   }
 
   handleWsRegionClick = (region, event) => {
@@ -231,8 +221,8 @@ export default class Playtomaton extends React.Component {
       return;
     }
 
-    this.setState((prevState) => {
-      if (this.sameVicinity(newVicinity, prevState)) {
+    this.setState((oldState) => {
+      if (this.sameVicinity(newVicinity, oldState)) {
         return {};
       } else {
         return newVicinity;
