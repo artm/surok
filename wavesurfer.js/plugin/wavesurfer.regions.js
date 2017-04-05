@@ -512,3 +512,5 @@ WaveSurfer.enableDragSelection = function (options) {
 WaveSurfer.disableDragSelection = function () {
     this.regions.disableDragSelection();
 };
+
+// vim:sw=4 sts=4:

@@ -215,3 +215,5 @@ WaveSurfer.initMinimap = function (params) {
     map.init(this, params);
     return map;
 };
+
+// vim:sw=4 sts=4:
