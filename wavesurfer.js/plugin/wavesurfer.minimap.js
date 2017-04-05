@@ -149,11 +149,12 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
 
     onOverviewDragStart: function(event) {
         this.draggingOverview = true;
+        this.dragOffset = event.clientX - this.overviewRegion.offsetLeft;
         this.captureMouse();
     },
 
     onOverviewDrag: function(event) {
-        this.moveOverviewRegion(event.clientX - this.container.getBoundingClientRect().left);
+        this.moveOverviewRegion(event.clientX - this.container.getBoundingClientRect().left - this.dragOffset);
     },
 
     onOverviewDragEnd: function(event) {
