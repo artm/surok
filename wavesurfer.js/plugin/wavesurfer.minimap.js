@@ -199,13 +199,7 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
     },
 
     moveOverviewRegion: function(pixels) {
-        if (pixels < 0) {
-            this.overviewPosition = 0;
-        } else if (pixels + this.overviewWidth < this.width) {
-            this.overviewPosition = pixels;
-        } else {
-            this.overviewPosition = (this.width - this.overviewWidth);
-        }
+        this.overviewPosition = Math.min(Math.max(pixels, 0), this.width - this.overviewWidth);
         this.overviewRegion.style.left = this.overviewPosition + 'px';
         this.wavesurfer.drawer.wrapper.scrollLeft = this.overviewPosition * this.ratio;
     }
