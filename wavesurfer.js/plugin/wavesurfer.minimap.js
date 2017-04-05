@@ -28,6 +28,7 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
             this.regions();
         }
 
+        this.onOverviewDragStart = this.onOverviewDragStart.bind(this);
         this.onOverviewDrag = this.onOverviewDrag.bind(this);
         this.onOverviewDragEnd = this.onOverviewDragEnd.bind(this);
         this.bindWaveSurferEvents();
@@ -131,14 +132,9 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
     },
 
     bindMinimapEvents: function () {
-        var my = this;
         if (this.params.showOverview) {
-            this.overviewRegion.addEventListener('mousedown', function(event) {
-                my.draggingOverview = true;
-                my.captureMouse();
-            });
+            this.overviewRegion.addEventListener('mousedown', this.onOverviewDragStart);
         }
-
     },
 
     captureMouse: function() {
@@ -149,6 +145,11 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
     releaseMouse: function() {
         document.removeEventListener('mousemove', this.onOverviewDrag);
         document.removeEventListener('mouseup', this.onOverviewDragEnd);
+    },
+
+    onOverviewDragStart: function(event) {
+        this.draggingOverview = true;
+        this.captureMouse();
     },
 
     onOverviewDrag: function(event) {
