@@ -8,6 +8,8 @@ import React from "react";
 import FlatButton from "material-ui/FlatButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
 import RefreshIndicator from "material-ui/RefreshIndicator";
+import Slider from "material-ui/Slider";
+import Drawer from "material-ui/Drawer";
 import {HotKeys} from "react-hotkeys";
 
 let wavesurferInitialSettings = {
@@ -15,8 +17,7 @@ let wavesurferInitialSettings = {
   barWidth: 2,
   hideScrollbar: true,
   interact: false,
-  cursorColor: "rgba(255,255,255,0.1)",
-  scrollParent: false
+  cursorColor: "rgba(255,255,255,0.1)"
 };
 
 let minimapInitialSettings = {
@@ -37,7 +38,9 @@ export default class Playtomaton extends React.Component {
       loopCount: 0,
       maxLoopCount: 3,
       nextRegion: "region_0",
-      loading: true
+      loading: true,
+      settingsOpen: false,
+      pauseAfterSegment: 25
     };
   }
 
@@ -69,8 +72,17 @@ export default class Playtomaton extends React.Component {
             <FlatButton onClick={this.handlePrev} label="Prev" disabled={!this.state.prevRegion} />
             <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
             <FlatButton onClick={this.handleNext} label="Next" disabled={!this.state.nextRegion} />
+            <FlatButton onClick={this.handleToggleSettings} label="Settings" />
           </CardActions>
         </Card>
+        <Drawer
+            open={this.state.settingsOpen}
+            docked={false}
+            containerClassName="settings-container"
+            onRequestChange={(open, reason) => this.setState({settingsOpen: open})} >
+          <div>Pause after segment: {this.state.pauseAfterSegment}%</div>
+          <Slider min={0} step={25} max={250} value={this.state.pauseAfterSegment} onChange={this.handlePauseAfterSegmentChange}/>
+        </Drawer>
       </HotKeys>
     );
   }
@@ -96,6 +108,12 @@ export default class Playtomaton extends React.Component {
   handleNext = (event) => {
     event.preventDefault();
     this.jumpToRegion(this.state.nextRegion);
+  }
+
+  handleToggleSettings = () => this.setState({settingsOpen: !this.state.settingsOpen});
+
+  handlePauseAfterSegmentChange = (event, newValue) => {
+    this.setState({pauseAfterSegment: newValue});
   }
 
   seekToRegion(region) {
