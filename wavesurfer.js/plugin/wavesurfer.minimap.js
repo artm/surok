@@ -174,15 +174,14 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
         //width of the drawers
         this.ratio = this.wavesurfer.drawer.width / this.width;
         this.overviewWidth = (this.width / this.ratio);
-        this.overviewPosition = 0;
         this.overviewRegion.style.width = (this.overviewWidth - (this.params.overviewBorderSize * 2)) + 'px';
     },
 
     moveOverviewRegion: function(pixels) {
-        console.log(pixels, this.width - this.overviewWidth, this.width, this.overviewWidth);
-        this.overviewPosition = Math.min(Math.max(pixels, 0), this.width - this.overviewWidth);
-        this.overviewRegion.style.left = this.overviewPosition + 'px';
-        this.wavesurfer.drawer.wrapper.scrollLeft = this.overviewPosition * this.ratio;
+        var actualWidth = this.wrapper.offsetWidth;
+        var overviewPosition = Math.min(Math.max(pixels, 0), actualWidth - this.overviewWidth);
+        this.overviewRegion.style.left = overviewPosition + 'px';
+        this.wavesurfer.drawer.wrapper.scrollLeft = overviewPosition * this.ratio;
     }
 });
 
