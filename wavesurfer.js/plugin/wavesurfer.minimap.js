@@ -191,8 +191,6 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
         //get proportional width of overview region considering the respective
         //width of the drawers
         this.ratio = this.wavesurfer.drawer.width / this.width;
-        this.waveShowedWidth = this.wavesurfer.drawer.width / this.ratio;
-        this.waveWidth = this.wavesurfer.drawer.width;
         this.overviewWidth = (this.width / this.ratio);
         this.overviewPosition = 0;
         this.overviewRegion.style.width = (this.overviewWidth - (this.params.overviewBorderSize * 2)) + 'px';
