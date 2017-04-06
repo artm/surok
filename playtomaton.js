@@ -29,6 +29,7 @@ const minimapInitialSettings = {
 };
 
 const pauseStep = 100;
+const persistStateFields = ["maxLoopCount", "pauseAfterSegment"];
 
 function LoadingPlaceholder(props) {
   return props.loading &&
@@ -57,6 +58,13 @@ export default class Playtomaton extends React.Component {
       pauseDuration: 0,
       isPaused: false
     };
+    for(let i in persistStateFields) {
+      let  field = persistStateFields[i];
+      let value = JSON.parse(localStorage.getItem(field));
+      if (value !== undefined && value !== null) {
+        this.state[field] = value;
+      }
+    }
   }
 
   render() {
@@ -181,6 +189,15 @@ export default class Playtomaton extends React.Component {
     this.ws.on("audioprocess", this.handleWsAudioprocess);
     this.ws.on("seek", this.handleWsSeek);
     this.ws.on("region-click", this.handleWsRegionClick);
+  }
+
+  componentWillUpdate(newProps, newState) {
+    for(let i in persistStateFields) {
+      let  field = persistStateFields[i];
+      if (this.state[field] != newState[field]) {
+        localStorage.setItem(field,  JSON.stringify(newState[field]));
+      }
+    }
   }
 
   handleWsReady = () => {
