@@ -50,7 +50,6 @@ export default class Playtomaton extends React.Component {
       loopRegion: null,
       loopCount: 0,
       maxLoopCount: 3,
-      nextRegion: "region_0",
       loading: true,
       settingsOpen: false,
       pauseAfterSegment: 25,
