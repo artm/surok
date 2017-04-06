@@ -88,14 +88,15 @@ export default class Playtomaton extends React.Component {
             <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
             <FlatButton onClick={this.handleNext} label="Next" disabled={!this.state.nextRegion} />
             <FlatButton onClick={this.handleToggleSettings} label="Settings" />
-            <span style={{ display: (this.state.isPaused ? "inline" : "none") }}>
-              <CircularProgress
-                size={20}
-                mode="determinate"
-                max={this.state.pauseDuration}
-                value={this.state.pauseProgress}
-              />
-            </span>
+            {
+              this.state.isPaused &&
+                <CircularProgress
+                  size={20}
+                  mode="determinate"
+                  max={this.state.pauseDuration}
+                  value={this.state.pauseProgress}
+                />
+            }
           </CardActions>
         </Card>
         <Drawer
