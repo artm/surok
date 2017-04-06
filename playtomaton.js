@@ -98,6 +98,8 @@ export default class Playtomaton extends React.Component {
             docked={false}
             containerClassName="settings-container"
             onRequestChange={(open, reason) => this.setState({settingsOpen: open})} >
+          <div>Repeat each segment {this.state.maxLoopCount} times</div>
+          <Slider min={1} step={1} max={7} value={this.state.maxLoopCount} onChange={this.handleMaxLoopCountChange}/>
           <div>Pause after segment: {this.state.pauseAfterSegment}%</div>
           <Slider min={0} step={25} max={250} value={this.state.pauseAfterSegment} onChange={this.handlePauseAfterSegmentChange}/>
         </Drawer>
@@ -135,6 +137,10 @@ export default class Playtomaton extends React.Component {
   }
 
   handleToggleSettings = () => this.setState({settingsOpen: !this.state.settingsOpen});
+
+  handleMaxLoopCountChange = (event, newValue) => {
+    this.setState({maxLoopCount: newValue});
+  }
 
   handlePauseAfterSegmentChange = (event, newValue) => {
     this.setState({pauseAfterSegment: newValue});
