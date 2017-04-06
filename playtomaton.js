@@ -31,15 +31,13 @@ const minimapInitialSettings = {
 const pauseStep = 100;
 
 function LoadingPlaceholder(props) {
-  return props.loading && <center><CircularProgress size={props.size} /></center>;
+  return props.loading &&
+    <center><CircularProgress size={props.size} /></center>;
 }
 
 function PauseProgress(props) {
-  if (props.visible) {
-    return <CircularProgress size={20} mode="determinate" max={props.max} value={props.value} />;
-  } else {
-    return null;
-  }
+  return props.visible &&
+    <CircularProgress size={20} mode="determinate" max={props.max} value={props.value} />;
 }
 
 export default class Playtomaton extends React.Component {
