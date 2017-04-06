@@ -122,6 +122,7 @@ export default class Playtomaton extends React.Component {
     event.preventDefault();
     if (this.state.playing) {
       this.ws.pause();
+      this.clearPauseProgress();
     } else {
       this.ws.play();
     }
@@ -292,15 +293,23 @@ export default class Playtomaton extends React.Component {
         };
       })
     } else {
-      window.clearInterval(this.pauseStepId);
-      this.setState({
-        pauseProgress: 0,
-        isPaused: false
-      });
+      this.clearPauseProgress()
       if (this.state.playing) {
         this.ws.play();
       }
     }
+  }
+
+  clearPauseProgress() {
+    if (this.pauseStepId) {
+      window.clearInterval(this.pauseStepId);
+      this.pauseStepId = null;
+    }
+    this.setState({
+      pauseProgress: 0,
+      pauseDuration: 0,
+      isPaused: false
+    });
   }
 
   currentPauseDuration() {
