@@ -28,6 +28,16 @@ let minimapInitialSettings = {
   overviewBorderSize: 2
 };
 
+class LoadingPlaceholder extends React.Component {
+  render() {
+    return <center>
+      <CircularProgress size={this.props.size} style={{
+        display: (this.props.loading ? "inline-block" : "none")
+      }}/>
+    </center>
+  }
+}
+
 export default class Playtomaton extends React.Component {
   constructor(props) {
     super(props);
@@ -65,11 +75,7 @@ export default class Playtomaton extends React.Component {
           />
           <CardMedia>
             <div ref="wavesurfer" style={{ height: `${wavesurferHeight}px` }}>
-              <center>
-                <CircularProgress size={wavesurferHeight} style={{
-                  display: (this.state.loading ? "inline-block" : "none")
-                }}/>
-              </center>
+              <LoadingPlaceholder size={wavesurferHeight} loading={this.state.loading} />
             </div>
           </CardMedia>
           <CardActions>
