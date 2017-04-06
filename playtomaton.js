@@ -7,7 +7,7 @@ import Segmentator from "./segmentator";
 import React from "react";
 import FlatButton from "material-ui/FlatButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
-import RefreshIndicator from "material-ui/RefreshIndicator";
+import CircularProgress from "material-ui/CircularProgress";
 import Slider from "material-ui/Slider";
 import Drawer from "material-ui/Drawer";
 import {HotKeys} from "react-hotkeys";
@@ -65,7 +65,11 @@ export default class Playtomaton extends React.Component {
           />
           <CardMedia>
             <div ref="wavesurfer" style={{ height: `${wavesurferHeight}px` }}>
-              <RefreshIndicator size={wavesurferHeight} top={0} left={0} status={this.state.loading ? "loading" : "hide"} />
+              <center>
+                <CircularProgress size={wavesurferHeight} style={{
+                  display: (this.state.loading ? "inline-block" : "none")
+                }}/>
+              </center>
             </div>
           </CardMedia>
           <CardActions>
