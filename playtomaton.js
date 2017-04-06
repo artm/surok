@@ -12,7 +12,7 @@ import Slider from "material-ui/Slider";
 import Drawer from "material-ui/Drawer";
 import {HotKeys} from "react-hotkeys";
 
-let wavesurferInitialSettings = {
+const wavesurferInitialSettings = {
   height: 100,
   barWidth: 2,
   hideScrollbar: true,
@@ -20,13 +20,15 @@ let wavesurferInitialSettings = {
   cursorColor: "rgba(255,255,255,0.1)"
 };
 
-let minimapInitialSettings = {
+const minimapInitialSettings = {
   height: 40,
   barWidth: null,
   showOverview: true,
   overviewBorderColor: "rgba(255,255,255,0.1)",
   overviewBorderSize: 2
 };
+
+const pauseStep = 100;
 
 class LoadingPlaceholder extends React.Component {
   render() {
@@ -50,7 +52,10 @@ export default class Playtomaton extends React.Component {
       nextRegion: "region_0",
       loading: true,
       settingsOpen: false,
-      pauseAfterSegment: 25
+      pauseAfterSegment: 25,
+      pauseProgress: 0,
+      pauseDuration: 0,
+      isPaused: false
     };
   }
 
@@ -83,6 +88,14 @@ export default class Playtomaton extends React.Component {
             <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
             <FlatButton onClick={this.handleNext} label="Next" disabled={!this.state.nextRegion} />
             <FlatButton onClick={this.handleToggleSettings} label="Settings" />
+            <span style={{ display: (this.state.isPaused ? "inline" : "none") }}>
+              <CircularProgress
+                size={20}
+                mode="determinate"
+                max={this.state.pauseDuration}
+                value={this.state.pauseProgress}
+              />
+            </span>
           </CardActions>
         </Card>
         <Drawer
@@ -263,12 +276,30 @@ export default class Playtomaton extends React.Component {
 
   pauseFor(duration) {
     this.ws.pause();
-    window.setTimeout(this.continueAfterPause, duration);
+    this.setState({
+      pauseDuration: duration,
+      pauseProgress: 0,
+      isPaused: true
+    });
+    this.pauseStepId = window.setInterval(this.pauseStep, pauseStep);
   }
 
-  continueAfterPause = () => {
-    if (this.state.playing) {
-      this.ws.play();
+  pauseStep = () => {
+    if (this.state.pauseProgress < this.state.pauseDuration) {
+      this.setState((oldState) => {
+        return {
+          pauseProgress: (oldState.pauseProgress + pauseStep)
+        };
+      })
+    } else {
+      window.clearInterval(this.pauseStepId);
+      this.setState({
+        pauseProgress: 0,
+        isPaused: false
+      });
+      if (this.state.playing) {
+        this.ws.play();
+      }
     }
   }
 
