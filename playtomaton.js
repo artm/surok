@@ -40,6 +40,14 @@ class LoadingPlaceholder extends React.Component {
   }
 }
 
+function PauseProgress(props) {
+  if (props.visible) {
+    return <CircularProgress size={20} mode="determinate" max={props.max} value={props.value} />;
+  } else {
+    return null;
+  }
+}
+
 export default class Playtomaton extends React.Component {
   constructor(props) {
     super(props);
@@ -88,15 +96,9 @@ export default class Playtomaton extends React.Component {
             <FlatButton onClick={this.handlePlayPause} label={this.playButtonLabel()} />
             <FlatButton onClick={this.handleNext} label="Next" disabled={!this.state.nextRegion} />
             <FlatButton onClick={this.handleToggleSettings} label="Settings" />
-            {
-              this.state.isPaused &&
-                <CircularProgress
-                  size={20}
-                  mode="determinate"
-                  max={this.state.pauseDuration}
-                  value={this.state.pauseProgress}
-                />
-            }
+            <PauseProgress visible={this.state.isPaused}
+                           max={this.state.pauseDuration}
+                           value={this.state.pauseProgress} />
           </CardActions>
         </Card>
         <Drawer
