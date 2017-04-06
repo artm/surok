@@ -30,14 +30,8 @@ const minimapInitialSettings = {
 
 const pauseStep = 100;
 
-class LoadingPlaceholder extends React.Component {
-  render() {
-    return <center>
-      <CircularProgress size={this.props.size} style={{
-        display: (this.props.loading ? "inline-block" : "none")
-      }}/>
-    </center>
-  }
+function LoadingPlaceholder(props) {
+  return props.loading && <center><CircularProgress size={props.size} /></center>;
 }
 
 function PauseProgress(props) {
